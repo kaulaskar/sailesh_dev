@@ -1,0 +1,60 @@
+
+links 
+https://www.techbeginner.in/2020/03/how-to-secure-nginx-with-lets-encrypt-on-ubuntu-16-04-18-04-20-04.html
+https://phoenixnap.com/kb/redirect-http-to-https-nginx
+
+
+#check domain name 
+$ nslookup www.domain.com
+In this post, We will install and configure Let’s Encrypt ssl using nginx Web Server.
+
+Your domain must pointing with nginx Web server public IP, To verify domain pointing by using the command.
+
+
+$ nslookup www.domain.com
+
+
+You should get the your nginx server public ip, in my case i am using www.example.com.
+Step 1: Update  System
+
+You need to update the ubuntu current repository by using the command.
+
+
+$ sudo apt-get update
+Step 2: Install Certbot
+
+You need to install Certbot tool that help you auto configure on nginx Web Server by using the command.
+
+
+$ sudo apt install certbot python3-certbot-nginx -y
+Step 3: Activation of SSL Certificate
+
+You the following command for activation of your domain ssl certification.
+
+$ sudo certbot --nginx -d example.com -d www.example.com
+Its auto verify the domain and its will create all required files to configure in virtualhost ssl parameter, After installation and configuration, You will get the successful message, Now you can access with 
+
+
+
+https://www.example.com
+
+
+
+============================
+http to https redirection
+
+#create a file
+sudo nano /etc/nginx/sites-available/server.conf
+
+#past this in server.conf
+
+server {
+    listen 80 default_server;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+
+
+#restart nginx server
+
+sudo service nginx restart
