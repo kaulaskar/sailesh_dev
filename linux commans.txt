@@ -1,5 +1,31 @@
 create user and give sudor access to saillesh user
+=======================
 useradd -s /bin/bash -m sailesh
 passwd sailesh 
 usermod -aG sudo sailesh
 echo 'sailesh ALL=(ALL) NOPASSWD: ALL' | sudo tee -a /etc/sudoers
+
+
+
+changing the shell of the user
+========================
+cat /etc/shells
+usermod --shell /bin/bash sailesh
+
+usermod --shell /bin/bash sailesh
+
+editing the ssh_configfile
+===============
+
+nano /etc/ssh/sshd_config
+systemctl restart sshd
+service sshd restart
+service ssh restart
+sudo service ssh restart
+sudo systemctl restart sshd
+nano /etc/ssh/sshd_config
+sudo systemctl restart sshd
+sudo service ssh restart
+sudo systemctl restart sshd
+sudo systemctl restart ssh
+
