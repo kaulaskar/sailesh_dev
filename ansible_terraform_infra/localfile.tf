@@ -1,5 +1,5 @@
 resource "local_file" "inventory-file" {
-  content = templatefile("invtfile_detail.tpl",
+  content = templatefile("detail.tpl",
     {
 
       testserver01    = aws_instance.server.0.public_ip
