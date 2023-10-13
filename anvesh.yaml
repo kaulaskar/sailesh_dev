@@ -1,0 +1,61 @@
+---
+- name: Managing files and directories on Ubuntu systems
+  hosts: nginx_server
+  become: yes
+
+  tasks:
+    - name: Create a file 
+      ansible.builtin.file:
+        path: /opt/anvesh.txt
+        state: touch
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Create a directory
+      ansible.builtin.file:
+        path: /opt/sampledirectory
+        state: directory
+        owner: root
+        group: root
+        mode: '0640'
+
+    - name: Changing the file ownership and permissions
+      ansible.builtin.file:
+        path: /opt/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Delete a file
+      ansible.builtin.file:
+        path: /opt/file.txt
+        state: absent
+
+    - name: Delete a directory
+      ansible.builtin.file:
+        path: /opt/test
+        state: absent
+
+    - name: change the content
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/
+        search_string: '127.0.0.1'
+        #regexp: '^127\.0\.0\.1'
+        line: 127.0.0.1 localhost
+        owner: root
+        group: root
+
+    - name: Gitcheckout
+      ansible.builtin.git:
+        repo: #mention your git repo link enclosed within strings
+        dest: /opt/ #mention the directory name of git repo
+        version: branch
+    
+    - name: copy files from ansible to remote systems
+      ansible.builtin.copy:
+        src: /var/www/html/index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'

@@ -1,0 +1,24 @@
+---
+ - name: uninstall nginx
+   hosts: nginx_server
+   become: yes 
+  
+   tasks:
+    - name: Stop Nginx service
+      service:
+        name: nginx
+        state: stopped
+      ignore_errors: yes  # Ignore errors if Nginx is not installed or not running
+
+    - name: uninstall nginx server
+      apt:
+       name: nginx
+       state: absent
+    - name: Delete Nginx default HTML files
+      file:
+        path: "/usr/share/nginx/html/{{ item }}"
+        state: absent
+      with_items:
+        - index.html
+        - 50x.html
+      when: ansible_distribution == 'Ubuntu'   

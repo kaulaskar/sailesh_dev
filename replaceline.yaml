@@ -1,0 +1,12 @@
+---
+ - name: replace 
+   hosts: remote_server
+   become: yes
+
+   tasks:
+   - name: replace line 
+     become: yes
+     lineinfile:
+      path: /opt/testfile
+      regexp: '^PubkeyAuthentication no'
+      line: '#PubkeyAuthentication yes'
