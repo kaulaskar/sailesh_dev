@@ -15,7 +15,7 @@
       ansible.builtin.git:
        repo: 'https://github.com/ankit20000/DevOpsSRE-PROJECT.git'
        dest: /opt/DevOpsSRE-PROJECT
-       version: release-0.22
+       
     
 
        
