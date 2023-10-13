@@ -4,8 +4,10 @@
    become: yes 
   
    tasks:
-    - name: uninstall completly
-      shell: sudo apt-get remove nginx nginx-common -y.
+    - name: uninstall 
+      shell: sudo apt-get remove nginx nginx-common -y
+    - name: remove all   
       shell: sudo apt-get purge nginx nginx-common -y
+    - name: remove dependencies
       shell: sudo apt-get autoremove -y
    

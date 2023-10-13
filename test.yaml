@@ -30,7 +30,7 @@
     - name: Delete a file
       ansible.builtin.file:
         path: /opt/file.txt
-        state: absent
+        state: absentcat 
 
     - name: Delete a directory
       ansible.builtin.file:
