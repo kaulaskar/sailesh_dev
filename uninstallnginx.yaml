@@ -1,0 +1,11 @@
+---
+ - name: uninstall nginx completly
+   hosts: nginx_server
+   become: yes 
+  
+   tasks:
+    - name: uninstall completly
+      shell: sudo apt-get remove nginx nginx-common -y.
+      shell: sudo apt-get purge nginx nginx-common -y
+      shell: sudo apt-get autoremove -y
+   
