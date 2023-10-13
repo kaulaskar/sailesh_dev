@@ -1,6 +1,6 @@
 ---
  - name: uninstall nginx completly
-   hosts: nginx_server
+   hosts: remote_server
    become: yes 
   
    tasks:
