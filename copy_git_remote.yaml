@@ -13,8 +13,8 @@
         mode: 0644
     - name: Git checkout
       ansible.builtin.git:
-       repo: 'https://github.com/kaulaskar/sailesh_dev.git'
-       dest: /opt/sailesh_dev
+       repo: 'https://github.com/ankit20000/DevOpsSRE-PROJECT.git'
+       dest: /opt/DevOpsSRE-PROJECT
        version: release-0.22
     
 

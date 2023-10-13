@@ -22,9 +22,9 @@
         owner: root
         group: root
         mode: 0644
-    - name: Git checkout
+    - name: copy file from git to remote
       ansible.builtin.git:
-       repo: 'https://github.com/kaulaskar/sailesh_dev.git'
-       dest: /opt/sailesh_dev
+       repo: 'https://github.com/ankit20000/DevOpsSRE-PROJECT.git'
+       dest: /opt/DevOpsSRE-PROJECT
        version: release-0.22
     
