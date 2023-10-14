@@ -1,0 +1,18 @@
+---
+ - name: replace
+   hosts: remote_server
+   become: yes
+   tasks:
+   - name: Ansible replace string
+     replace:
+      path: /opt/vpc.tf
+      regexp: "^key"
+      replace: "variable"
+
+
+
+      # - name: Ansible replace string example
+      #   replace:
+      #    path: /opt/vpc.tf
+      #    regexp:  '(\s+)server\.myubuntu\.com(\s+.*)?$'
+      #    replace: '\1server.linuxtechi.info\2'

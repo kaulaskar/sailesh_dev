@@ -1,17 +1,15 @@
-# ######################vpc#############
-# resource "aws_vpc" "main" {
-#   cidr_block = "10.0.0.0/16"
+######################vpc#############
+data "aws_vpc" "my-vpc" {
+  id = "vpc-00799757fc6f63de0"
 
-#   tags = {
-#     Name = "main"
-#   }
-# }
+ 
+}
 
-# ################subnet###################
-# resource "aws_subnet" "subnet-public" {
-#   vpc_id            = aws_vpc.main.id
-#   cidr_block        = "10.0.1.0/24"
-#   availability_zone = "ap-south-1a"
+################subnet###################
+resource "aws_subnet" "subnet-public" {
+  vpc_id            = data.aws_vpc.my-vpc.id
+  cidr_block        = "10.1.2.0/25"
+  availability_zone = "ap-south-1a"
 
 #   tags = {
 #     Name = "subnet" 
@@ -19,25 +17,23 @@
 # }
 
 
-# ################IGW###############
-# resource "aws_internet_gateway" "IGW" {
-#   vpc_id = aws_vpc.main.id
-#   tags = {
-#     Name = "IGW"
-#   }
-# }
+################IGW###############
+data "aws_internet_gateway" "my-ig" {
+  internet_gateway_id = "igw-0cb036c218f49bf57"
+ 
+}
 
-# ################routtable###################
-# resource "aws_route_table" "public_rt1" {
-#   vpc_id = aws_vpc.main.id
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.IGW.id
-#   }
-#   tags = {
-#     Name = "Public-rt"
-#   }
-# }
+################routtable###################
+resource "aws_route_table" "public_rt1" {
+  vpc_id = data.aws_vpc.my-vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = data.aws_internet_gateway.my-ig.id
+  }
+  tags = {
+    Name = "Public-rt"
+  }
+}
 
 # ################subnetassocation###################
 # resource "aws_route_table_association" "Public_rt1" {
@@ -46,11 +42,11 @@
 # }
 
 
-# ################securitygroup###################
-# resource "aws_security_group" "allow_all" {
-#   name        = "allow_tls"
-#   description = "Allow TLS inbound traffic"
-#   vpc_id      = aws_vpc.main.id
+################securitygroup###################
+resource "aws_security_group" "allow_all" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+  vpc_id      = data.aws_vpc.my-vpc.id
 
 #   ingress {
 #     description      = "TLS from VPC"
@@ -69,33 +65,48 @@
   
 #   }
 
-#   tags = {
-#     Name = "allow_tls"
-#   }
-# }
+  tags = {
+    Name = "allow_tls"
+  }
+}
 
-# ################instance###################
-# resource "aws_instance" "server" {
-#   count = 3
-#   ami = "ami-0f5ee92e2d63afc18"
-#   instance_type               = "t2.micro"
-#   key_name                    = "desktop-key"
-#   subnet_id                   = aws_subnet.subnet-public.id
-#   vpc_security_group_ids      = [aws_security_group.allow_all.id]
-#   associate_public_ip_address = true
-#   tags = {
-#     Name       = "server-${count.index+1}"
-#   }
-# #   provisioner "local-exec" {
-# #   command = <<-EOT
-# #     #!/bin/bash
-# #     mkdir -p ansible_inventory
-# #     for ip in ${aws_instance.server.*.public_ip}; do
-# #       echo "$ip" >> ansible_inventory/hosts.txt
-# #     done
-# #   EOT
-# # }
+################instance###################
+resource "aws_instance" "server" {
+  # count = 1
+  ami = "ami-0f5ee92e2d63afc18"
+  instance_type               = "t2.micro"
+  key_name                    = "desktop-key"
+  subnet_id                   = aws_subnet.subnet-public.id
+  vpc_security_group_ids      = [aws_security_group.allow_all.id]
+  associate_public_ip_address = true
+  tags = {
+    Name       = "server"
+  }
+  user_data = <<EOF
+  #!/bin/bash
 
+  echo "Copying the SSH Key"
+  sudo echo "key" > /opt/keys
+  sleep 10
+  cat /opt/keys >> /root/.ssh/authorized_keys
+  
+  EOF
+  
+}
+}
+
+
+
+
+# # # Create a local provisioner to run a script on your local machine
+# provisioner "local-exec" {
+#   command = <<-EOT
+#     #!/bin/bash
+#     mkdir -p ansible_inventory
+#     for ip in ${aws_instance.server[*].public_ip}; do
+#       echo "$ip" >> ansible_inventory/hosts.txt
+#     done
+#   EOT
 # }
 
 # # # # Create a local provisioner to run a script on your local machine
@@ -111,47 +122,45 @@
 
 # # Output the IP addresses of the instances (optional)
 
-# ########################vpc_peering############
+# data "data.my-vpc" "my-vpc" {
+#   id = "vpc-00799757fc6f63de0"
+# }
 
-# # data "aws_vpc" "my-vpc" {
-# #   id = "vpc-00799757fc6f63de0"
-# # }
+# data "aws_route_table" "public_rt" {
+#   route_table_id = "rtb-06a308a5a90b63396"
+# }
 
-# # data "aws_route_table" "public_rt" {
-# #   route_table_id = "rtb-06a308a5a90b63396"
-# # }
+# resource "data.my-vpc_peering_connection" "my-vpc" {
+#   peer_vpc_id = data.data.aws_vpc.my-vpc.id
+#   vpc_id      = data.aws_vpc.my-vpc.id
+#   auto_accept = true
+#   accepter {
+#     allow_remote_vpc_dns_resolution = true
+#   }
 
-# # resource "aws_vpc_peering_connection" "my-vpc" {
-# #   peer_vpc_id = data.aws_vpc.my-vpc.id
-# #   vpc_id      = aws_vpc.main.id
-# #   auto_accept = true
-# #   accepter {
-# #     allow_remote_vpc_dns_resolution = true
-# #   }
+#   requester {
+#     allow_remote_vpc_dns_resolution = true
+#   }
+# }
 
-# #   requester {
-# #     allow_remote_vpc_dns_resolution = true
-# #   }
-# # }
+# resource "aws_route" "to-my-vpc" {
+#   route_table_id            = aws_route_table.public_rt1.id
+#   destination_cidr_block    = "10.1.0.0/16"
+#   vpc_peering_connection_id = data.my-vpc_peering_connection.my-vpc.id
+# }
 
-# # resource "aws_route" "to-my-vpc" {
-# #   route_table_id            = aws_route_table.public_rt1.id
-# #   destination_cidr_block    = "10.1.0.0/16"
-# #   vpc_peering_connection_id = aws_vpc_peering_connection.my-vpc.id
-# # }
-
-# # resource "aws_route" "from-my-vpc" {
-# #   route_table_id            = data.aws_route_table.public_rt.id
-# #   destination_cidr_block    = "10.0.0.0/16"
-# #   vpc_peering_connection_id = aws_vpc_peering_connection.my-vpc.id
-# # }
+# resource "aws_route" "from-my-vpc" {
+#   route_table_id            = data.aws_route_table.public_rt.id
+#   destination_cidr_block    = "10.0.0.0/16"
+#   vpc_peering_connection_id = data.my-vpc_peering_connection.my-vpc.id
+# }
 
 
 
-# # output "instance_public_ips" {
-# #   value = aws_instance.server.*.public_ip
-# # }
+# output "instance_public_ips" {
+#   value = aws_instance.server.*.public_ip
+# }
 
-# # output "instance_privat_ips" {
-# #   value = aws_instance.server.*.private_ip
-# # }
+# output "instance_privat_ips" {
+#   value = aws_instance.server.*.private_ip
+# }

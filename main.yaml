@@ -1,0 +1,30 @@
+---
+ - name: copy files from controller and git to remote servers
+   hosts: remote_server
+   become: yes 
+  
+   tasks:
+    - name: install nginx server
+      apt:
+       name: nginx
+       state: present
+      when: ansible_distribution == 'Ubuntu'  
+    
+    - name: service 
+      service: 
+       name: nginx
+       state: started    
+
+    - name: copy file from controller to remote 
+      copy:
+        src: /opt/file.conf
+        dest: /etc/file.conf
+        owner: root
+        group: root
+        mode: 0644
+    - name: copy file from git to remote
+      ansible.builtin.git:
+       repo: 'https://github.com/ankit20000/DevOpsSRE-PROJECT.git'
+       dest: /opt/DevOpsSRE-PROJECT
+      
+    
