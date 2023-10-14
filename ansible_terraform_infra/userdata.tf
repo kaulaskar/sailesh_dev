@@ -1,6 +1,6 @@
 
-            
-            
+
+
 #  provisioner "remote-exec" {
 #   command = <<-EOT
 #     #!/bin/bash

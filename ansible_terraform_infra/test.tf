@@ -2,7 +2,7 @@
 data "aws_vpc" "my-vpc" {
   id = "vpc-00799757fc6f63de0"
 
- 
+
 }
 
 ################subnet###################
@@ -11,78 +11,78 @@ resource "aws_subnet" "subnet-public" {
   cidr_block        = "10.1.2.0/25"
   availability_zone = "ap-south-1a"
 
-#   tags = {
-#     Name = "subnet" 
-#   }
-# }
+  #   tags = {
+  #     Name = "subnet" 
+  #   }
+  # }
 
 
-################IGW###############
-data "aws_internet_gateway" "my-ig" {
-  internet_gateway_id = "igw-0cb036c218f49bf57"
- 
-}
+  ################IGW###############
+  data "aws_internet_gateway" "my-ig" {
+    internet_gateway_id = "igw-0cb036c218f49bf57"
 
-################routtable###################
-resource "aws_route_table" "public_rt1" {
-  vpc_id = data.aws_vpc.my-vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = data.aws_internet_gateway.my-ig.id
   }
-  tags = {
-    Name = "Public-rt"
+
+  ################routtable###################
+  resource "aws_route_table" "public_rt1" {
+    vpc_id = data.aws_vpc.my-vpc.id
+    route {
+      cidr_block = "0.0.0.0/0"
+      gateway_id = data.aws_internet_gateway.my-ig.id
+    }
+    tags = {
+      Name = "Public-rt"
+    }
   }
-}
 
-# ################subnetassocation###################
-# resource "aws_route_table_association" "Public_rt1" {
-#   subnet_id      = aws_subnet.subnet-public.id
-#   route_table_id = aws_route_table.public_rt1.id
-# }
+  # ################subnetassocation###################
+  # resource "aws_route_table_association" "Public_rt1" {
+  #   subnet_id      = aws_subnet.subnet-public.id
+  #   route_table_id = aws_route_table.public_rt1.id
+  # }
 
 
-################securitygroup###################
-resource "aws_security_group" "allow_all" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
-  vpc_id      = data.aws_vpc.my-vpc.id
+  ################securitygroup###################
+  resource "aws_security_group" "allow_all" {
+    name        = "allow_tls"
+    description = "Allow TLS inbound traffic"
+    vpc_id      = data.aws_vpc.my-vpc.id
 
-#   ingress {
-#     description      = "TLS from VPC"
-#     from_port        = 0
-#     to_port          = 0
-#     protocol         = "-1"
-#     cidr_blocks      = ["0.0.0.0/0"]
-   
-#   }
+    #   ingress {
+    #     description      = "TLS from VPC"
+    #     from_port        = 0
+    #     to_port          = 0
+    #     protocol         = "-1"
+    #     cidr_blocks      = ["0.0.0.0/0"]
 
-#   egress {
-#     from_port        = 0
-#     to_port          = 0
-#     protocol         = "-1"
-#     cidr_blocks      = ["0.0.0.0/0"]
-  
-#   }
+    #   }
 
-  tags = {
-    Name = "allow_tls"
+    #   egress {
+    #     from_port        = 0
+    #     to_port          = 0
+    #     protocol         = "-1"
+    #     cidr_blocks      = ["0.0.0.0/0"]
+
+    #   }
+
+    tags = {
+      Name = "allow_tls"
+    }
   }
-}
 
-################instance###################
-resource "aws_instance" "server" {
-  # count = 1
-  ami = "ami-0f5ee92e2d63afc18"
-  instance_type               = "t2.micro"
-  key_name                    = "desktop-key"
-  subnet_id                   = aws_subnet.subnet-public.id
-  vpc_security_group_ids      = [aws_security_group.allow_all.id]
-  associate_public_ip_address = true
-  tags = {
-    Name       = "server"
-  }
-  user_data = <<EOF
+  ################instance###################
+  resource "aws_instance" "server" {
+    # count = 1
+    ami                         = "ami-0f5ee92e2d63afc18"
+    instance_type               = "t2.micro"
+    key_name                    = "desktop-key"
+    subnet_id                   = aws_subnet.subnet-public.id
+    vpc_security_group_ids      = [aws_security_group.allow_all.id]
+    associate_public_ip_address = true
+    tags = {
+      Name = "server"
+    }
+    user_data = <<EOF
   #!/bin/bash
 
   echo "Copying the SSH Key"
@@ -91,8 +91,7 @@ resource "aws_instance" "server" {
   cat /opt/keys >> /root/.ssh/authorized_keys
   
   EOF
-  
-}
+  }
 }
 
 
