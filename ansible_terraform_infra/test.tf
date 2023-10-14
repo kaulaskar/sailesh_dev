@@ -35,11 +35,11 @@ resource "aws_subnet" "subnet-public" {
     }
   }
 
-  # ################subnetassocation###################
-  # resource "aws_route_table_association" "Public_rt1" {
-  #   subnet_id      = aws_subnet.subnet-public.id
-  #   route_table_id = aws_route_table.public_rt1.id
-  # }
+  ################subnetassocation###################
+  resource "aws_route_table_association" "Public_rt1" {
+    subnet_id      = aws_subnet.subnet-public.id
+    route_table_id = data.aws_route_table.public_rt1.id
+  }
 
 
   ################securitygroup###################
@@ -48,22 +48,22 @@ resource "aws_subnet" "subnet-public" {
     description = "Allow TLS inbound traffic"
     vpc_id      = data.aws_vpc.my-vpc.id
 
-    #   ingress {
-    #     description      = "TLS from VPC"
-    #     from_port        = 0
-    #     to_port          = 0
-    #     protocol         = "-1"
-    #     cidr_blocks      = ["0.0.0.0/0"]
+    ingress {
+      description = "TLS from VPC"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
 
-    #   }
+    }
 
-    #   egress {
-    #     from_port        = 0
-    #     to_port          = 0
-    #     protocol         = "-1"
-    #     cidr_blocks      = ["0.0.0.0/0"]
+    egress {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
 
-    #   }
+    }
 
     tags = {
       Name = "allow_tls"
