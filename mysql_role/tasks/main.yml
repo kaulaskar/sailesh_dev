@@ -20,10 +20,10 @@
        state: present
        
 
-    - name: install MYSQL
-      apt:
-       name: mysql
-       state: present
+    # - name: install MYSQL
+    #   apt:
+    #    name: mysql
+    #    state: present
 
    
        
