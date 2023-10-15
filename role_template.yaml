@@ -1,5 +1,5 @@
 ---
   - hosts: remote_server
     roles:
-     - role: 'role_name'
+     - role: 'role_template'
   
