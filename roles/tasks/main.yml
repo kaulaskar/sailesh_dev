@@ -15,12 +15,12 @@
        repo: "{{git}}"
        dest: "{{destination}}"        
 
-    # - name: copy file from controller to remote 
-    #   copy:
-    #     src: "{{src}}"
-    #     dest: "{{dest}}"
-    #     owner: root
-    #     group: root
-    #     mode: 0644
+    - name: copy file from controller to remote 
+      copy:
+        src: files/file.config
+        dest: "{{dest}}"
+        owner: root
+        group: root
+        mode: 0644
   
  
