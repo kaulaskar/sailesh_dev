@@ -1,0 +1,5 @@
+---
+- name: Copy Jinja2 Template
+  hosts: your_target_hosts
+  roles:
+    - role_name

@@ -1,2 +1,11 @@
 ---
 # tasks file for role_name
+---
+- name: Copy Jinja2 template file
+  template:
+    src: templates/my_template.j2  # Source template file
+    dest: /opt/my_template  # Destination file on the target host
+  # You can optionally pass variables for template rendering:
+  # vars:
+  #   variable_name: value
+  #   another_variable: another_value
