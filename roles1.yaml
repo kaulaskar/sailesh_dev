@@ -1,5 +1,5 @@
 ---
 - name: Copy Jinja2 Template
-  hosts: your_target_hosts
+  - hosts: remote_server
   roles:
-    - role_name
+    - role: 'role_name'
