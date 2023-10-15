@@ -18,12 +18,18 @@
       apt:
        name: mysql-client
        state: present
-       
+      tags:
+         - install 
 
-    # - name: install MYSQL
-    #   apt:
-    #    name: mysql
-    #    state: present
+    - name: start and enable mysql service
+      service:
+        name: mysql
+        state: started
+        enabled: yes 
+      notify:
+         - restart mysql  
+ 
+
 
    
        
