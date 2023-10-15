@@ -1,5 +1,5 @@
 ---
- - name: install nginx server
+    - name: install nginx server
       apt:
        name: nginx
        state: present
@@ -8,7 +8,12 @@
     - name: service 
       service: 
        name: nginx
-       state: started    
+       state: started 
+       
+    - name: copy file from git to remote
+      ansible.builtin.git:
+       repo: "{{git}}"
+       dest: "{{destination}}"        
 
     # - name: copy file from controller to remote 
     #   copy:
@@ -17,8 +22,5 @@
     #     owner: root
     #     group: root
     #     mode: 0644
-    - name: copy file from git to remote
-      ansible.builtin.git:
-       repo: "{{git}}"
-       dest: "{{destination}}"
+  
  
