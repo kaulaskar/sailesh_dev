@@ -1,0 +1,9 @@
+---
+# # vars file for role_name
+# git: https://github.com/ankit20000/DevOpsSRE-PROJECT.git
+# destination: /opt/DevOpsSRE-PROJECT
+# # scr: /opt/file.conf
+# dest: /opt/file.config
+# dest1: /opt/html.index
+# server_name: "remote_server"
+# document_root: "root_doc"

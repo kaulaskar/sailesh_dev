@@ -1,0 +1,34 @@
+---
+     - name: Update and upgrade apt packages
+       become: yes
+       apt:
+        upgrade: 'yes'
+        update_cache: 'yes'
+     
+    - name: install mysql server 
+      become: yes
+      apt:
+       name: mysql-server
+       state: present
+      when: ansible_distribution == 'Ubuntu'  
+
+    - name: install mysql clent 
+      become: yes
+      apt:
+       name: mysql-client
+       state: present
+       
+
+    - name: install MYSQL
+      apt:
+       name: mysql
+       state: present
+
+   
+       
+          
+
+   
+  
+  
+ 
