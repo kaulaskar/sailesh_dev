@@ -22,5 +22,13 @@
         owner: root
         group: root
         mode: 0644
+    - name: copy file from controller to remote  using template
+      copy:
+        src: templates\html.index.j2
+        dest: "{{dest}}"
+        owner: root
+        group: root
+        mode: 0644
+      
   
  
