@@ -1,6 +1,5 @@
 ---
 # tasks file for role_name
----
 - name: Copy Jinja2 template file
   template:
     src: templates/my_template.j2  # Source template file
