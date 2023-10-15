@@ -23,9 +23,9 @@
         group: root
         mode: 0644
     - name: copy file from controller to remote  using template
-      vars:
-       server_name: remote_server
-       document_root: root_doc 
+      # vars:
+      #  server_name: remote_server
+      #  document_root: root_doc 
       copy:
         src: templates/html.index.j2
         dest: "{{dest1}}"
