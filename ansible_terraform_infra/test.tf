@@ -11,10 +11,10 @@ resource "aws_subnet" "subnet-public" {
   cidr_block        = "10.1.2.0/25"
   availability_zone = "ap-south-1a"
 
-  #   tags = {
-  #     Name = "subnet" 
-  #   }
-  # }
+    tags = {
+      Name = "subnet-t" 
+    }
+  }
 
 
   ################IGW###############
@@ -38,7 +38,7 @@ resource "aws_subnet" "subnet-public" {
   ################subnetassocation###################
   resource "aws_route_table_association" "Public_rt1" {
     subnet_id      = aws_subnet.subnet-public.id
-    route_table_id = data.aws_route_table.public_rt1.id
+    route_table_id = aws_route_table.public_rt1.id
   }
 
 
@@ -92,7 +92,7 @@ resource "aws_subnet" "subnet-public" {
   
   EOF
   }
-}
+
 
 
 
