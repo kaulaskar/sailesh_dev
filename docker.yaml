@@ -6,7 +6,7 @@
   tasks:
     - name: Update apt package cache
       shell: sudo apt-get update
-      
+
     - name: Install required packages
       apt:
         name:
@@ -42,7 +42,7 @@
 
     - name: Add your user to the docker group
       user:
-        name: "{{ ansible_ssh_user }}"
+        name: docker
         group: docker
         append: yes
       when: ansible_ssh_user != 'root'
