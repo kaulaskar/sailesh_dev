@@ -5,8 +5,7 @@
 
   tasks:
     - name: Update apt package cache
-      apt:
-        update_cache: yes
+      shell: sudo apt update -y
 
     - name: Install required packages
       apt:
