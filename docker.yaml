@@ -1,28 +1,49 @@
 ---
-- hosts: all
+- name: Install Docker on Ubuntu
+  hosts: all
+  become: yes
+
   tasks:
-  - name: Install prerequisites for Docker repository
-    apt:
-      name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2', 'software-properties-common']
-      update_cache: yes
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
 
-  - name: Add Docker GPG key
-    apt_key:
-      url: https://download.docker.com/linux/ubuntu/gpg
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
 
-  - name: Add Docker APT repository
-    apt_repository:
-      repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
 
-  - name: Install Docker CE
-    apt:
-      name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
-      update_cache: yes
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+        state: present
 
-  - name: Install prerequisites for docker-compose
-    apt:
-      name: ['python3-pip', 'python3-setuptools', 'virtualenv']
+    - name: Update apt package cache (again with Docker repository)
+      apt:
+        update_cache: yes
 
-  - name: Install docker-compose
-    pip:
-      name: docker-compose
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add your user to the docker group
+      user:
+        name: "{{ ansible_ssh_user }}"
+        group: docker
+        append: yes
+      when: ansible_ssh_user != 'root'
