@@ -40,9 +40,9 @@
         state: started
         enabled: yes
 
-    - name: Add your user to the docker group
-      user:
-        name: docker
-        group: docker
-        append: yes
-      when: ansible_ssh_user != 'root'
+    # - name: Add your user to the docker group
+    #   user:
+    #     name: docker
+    #     group: docker
+    #     append: yes
+    #   when: ansible_ssh_user != 'root'
