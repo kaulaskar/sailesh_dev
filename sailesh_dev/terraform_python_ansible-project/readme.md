@@ -1,1 +1,0 @@
-# use pem key which we have mentioned for creation of ec2 instance 
